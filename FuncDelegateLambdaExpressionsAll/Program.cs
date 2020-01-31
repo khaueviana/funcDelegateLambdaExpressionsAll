@@ -108,7 +108,7 @@ namespace FuncDelegateLambdaExpressionsAll
                 Console.WriteLine(name);
             }
         }
-        
+
         private static void ComputeSums()
         {
             ItemList<Detail> orderDetails = new ItemList<Detail>();
@@ -126,6 +126,64 @@ namespace FuncDelegateLambdaExpressionsAll
 
             Func<int, int, int> sumV2 = (a, b) => a + b;
             Console.WriteLine(sumV2(3, 4));
+        }
+
+        private static void SampleLambda()
+        {
+            // Single Line Expression
+            Func<int, int> square = num => num * num;
+
+            // Multiple Lines Expression
+            Func<int, int> squareMulti = num =>
+            {
+                Console.WriteLine("before value: " + num);
+                int sq = num * num;
+                Console.WriteLine("after value: " + sq);
+                return sq;
+            };
+
+
+            var numbers = new List<int> { 2, 3, 4, 5 };
+
+            var squaredNumbers = numbers.Select(square);
+
+            var squaredNumbers2 = numbers.Select(squareMulti);
+
+            // Multiple Lines Expression
+            var squaredNumbers3 = numbers.Select(num =>
+            {
+                Console.WriteLine("before value: " + num);
+                int sq = num * num;
+                Console.WriteLine("after value: " + sq);
+                return sq;
+            });
+
+            Console.WriteLine(string.Join(" ", squaredNumbers));
+        }
+
+        private static void VarWithFunc()
+        {
+            // A Func lookup table.
+            var lookup = new Func<int, int>[]
+            {
+            a => a + 10,
+            a => a + 20,
+            a => a + 30
+            };
+
+            // get functon by index o/
+            var x = lookup[1](1);
+        }
+        
+        public static Action foo()
+        {
+            int i = 100;
+            Action a = () => Console.Write($"{i} ");
+            return a;
+        }
+        public static void bar(Action a)
+        {
+            a();
         }
 
         private static void Execute(Action func)
@@ -146,6 +204,10 @@ namespace FuncDelegateLambdaExpressionsAll
 
         static void Main(string[] args)
         {
+
+            var a = foo();
+            bar(a);
+
             Execute(SampleFuncSimple);
 
             Execute(SampleActionSimple);
@@ -159,6 +221,12 @@ namespace FuncDelegateLambdaExpressionsAll
             Execute(SampleFuncConvertMethodSimplifiedAndAnonymousAndLambdaExpression);
 
             Execute(ComputeSums);
+
+            Execute(SampleWithDelegateOrLambda);
+
+            Execute(SampleLambda);
+
+            Execute(VarWithFunc);
         }
     }
 }
